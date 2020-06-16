@@ -123,3 +123,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.idea/Kos-proj-3.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
