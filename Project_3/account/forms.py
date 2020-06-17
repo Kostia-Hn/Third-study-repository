@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-
 from account.models import ProUser
+
 
 class UserAccountRegistrationForms(UserCreationForm):
 
@@ -9,9 +9,9 @@ class UserAccountRegistrationForms(UserCreationForm):
         model = ProUser
         fields = ("username", 'first_name', 'last_name', 'email', )
 
+
 class UserAccountProfileForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = ProUser
         fields = ("username", 'first_name', 'last_name', 'email')
-
