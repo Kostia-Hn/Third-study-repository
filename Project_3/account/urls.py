@@ -2,6 +2,8 @@ from django.urls import path
 
 from account.views import CreateUserAccountView, UserAccountLoginView, UserAccountLogoutView, UserAccountUpdateView
 
+app_name = 'account'
+
 urlpatterns = [
 
     path('register/', CreateUserAccountView.as_view(), name='registration'),

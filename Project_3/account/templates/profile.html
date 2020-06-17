@@ -16,8 +16,8 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{u_form|crispy}}
-        {{p_form|crispy}}
+        {{form|crispy}}
+<!--        {{p_form|crispy}}-->
 
         <button type="submit">Save</button>
         <a href="{% url 'index' %}" class="button">Cancel</a>

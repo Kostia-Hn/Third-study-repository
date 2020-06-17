@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from account.forms import UserAccountRegistrationForms, UserAccountProfileForm
@@ -36,8 +36,8 @@ class UserAccountLoginView(LoginView):
     extra_context = {'title': 'Login as a user'}
     # success_url = reverse_lazy('success')
 
-    # def get_success_url(self):
-    #     return reverse('success')
+    def get_success_url(self):
+        return reverse('success')
 
 
 class UserAccountLogoutView(LogoutView):
@@ -52,3 +52,6 @@ class UserAccountUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_success_url(self):
+        return reverse('success')
