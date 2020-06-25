@@ -2,8 +2,9 @@
 {% load crispy_forms_tags %}
 
 {%block content%}
+    <form>
     <h3>User was logged out</h3>
 
-    <a href="{% url 'login'%}" class="btn btn-primary">Login</a>
+    <a href="{% url 'account:login'%}" class="btn btn-primary">Login</a>
     </form>
 {%endblock%}

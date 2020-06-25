@@ -23,6 +23,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('admin/', admin.site.urls, name='adm'),
+    path('', TemplateView.as_view(template_name='success.html'), name='success'),
 
 ]
 urlpatterns += \
