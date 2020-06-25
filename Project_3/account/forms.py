@@ -14,4 +14,4 @@ class UserAccountProfileForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = ProUser
-        fields = ("username", 'first_name', 'last_name', 'email')
+        fields = ("username", 'first_name', 'last_name', 'email', 'image')

@@ -3,10 +3,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
-from account.forms import UserAccountRegistrationForms, UserAccountProfileForm
-
+from .forms import UserAccountRegistrationForms, UserAccountProfileForm
+from .models import ProUser
 
 class CreateUserAccountView(CreateView):
     model = User
@@ -51,3 +51,9 @@ class UserAccountUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('success')
+
+class LeaderBoard(ListView):
+    model = ProUser
+    template_name = 'leaderboard.html'
+    context_object_name = 'players_list'
+    paginate_by = 20
