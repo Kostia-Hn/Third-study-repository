@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='adm'),
     path('', TemplateView.as_view(template_name='success.html'), name='success'),
 
+    path('test/', include('testsuite.urls'))
+
 ]
 urlpatterns += \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

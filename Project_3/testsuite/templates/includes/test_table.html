@@ -1,0 +1,39 @@
+
+{% if test_list %}
+
+    {% include 'pagination.html' %}
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+              <th></th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Level</th>
+              <th>Start</th>
+            </tr>
+        </thead>
+
+            {% for Test in test_list %}
+                <tr>
+                  <td>
+                  <div class="media">
+                        <div class="img-circle.vert">
+                            <img class="rounded-circle p-1 m-1" width="200" height="200" src="{{ Test.image.url }}">
+                        </div>
+                    </div>
+                  </td>
+                  <td> {{ Test.title }}</td>
+                  <td> {{ Test.description }}</td>
+                  <td> {{ Test.level }}</td>
+
+                  <td> <a href="/test/{{ Test.id }}">Start</a></td>
+
+
+                </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Sorry, list is empty</p>
+{% endif %}
+

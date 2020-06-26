@@ -19,17 +19,24 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'test:list'%}">Test Suits <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account:leaderboard' %}">Leader board</a>
+                </li>
 
+            </ul>
+
+        </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 
             <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
-                    <div class="media">
-                        <div class="img-circle.vert">
-                            <img class="rounded-circle p-1 m-1" width="40" height="50" src="{{ user.profile.image.url }}">
-                        </div>
-                    </div>
+
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'account:profile'%}">Profile </a>
                     </li>
@@ -47,11 +54,6 @@
 
                 {% endif %}
             </ul>
-
-<!--            <form class="form-inline my-2 my-lg-0">-->
-<!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-<!--            </form>-->
 
         </div>
     </nav>
