@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from .models import Test
 
+
 class TestList(ListView):
     model = Test
     template_name = 'test_list.html'

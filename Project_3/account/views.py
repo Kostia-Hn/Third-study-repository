@@ -8,6 +8,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from .forms import UserAccountRegistrationForms, UserAccountProfileForm
 from .models import ProUser
 
+
 class CreateUserAccountView(CreateView):
     model = User
     template_name = 'registration.html'
@@ -51,6 +52,7 @@ class UserAccountUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('success')
+
 
 class LeaderBoard(ListView):
     model = ProUser

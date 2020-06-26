@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -7,7 +6,6 @@ class Topic(models.Model):
 
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=1024, null=True, blank=True)
-
 
     def __str__(self):
         return f'{self.title}'
@@ -64,7 +62,7 @@ class TestResult(models.Model):
 
 
 class TestResultDetails(models.Model):
-    test_results = models.ForeignKey(to=TestResult, related_name='test_results_d', on_delete=models.CASCADE)
+    test_results = models.ForeignKey(to=TestResult, related_name='test_results_details', on_delete=models.CASCADE)
     given_answers = models.ForeignKey(to=Answer, related_name='answer_details', on_delete=models.CASCADE)
     answered_questions = models.ForeignKey(to=Question, related_name='question_details', on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
