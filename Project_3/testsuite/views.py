@@ -1,9 +1,7 @@
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
 # Create your views here.
-from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.base import View
 
@@ -25,8 +23,7 @@ class TestRunView(View):
                 answer.text
                 for answer in question.answers.all()
             ]
-            return \
-                render(
+            return render(
                 request=request,
                 template_name='testrun.html',
                 context={'question': question,
@@ -37,11 +34,11 @@ class TestRunView(View):
             return render(
                 request=request,
                 template_name='test_finished.html',
-                context={'test': test,})
+                context={'test': test, })
 
     def post(self, request, pk, seq_nr):
         data = request.POST
-        text =  'you picked '
+        text = 'you picked '
         switch = 1
 
         question = Question.objects.filter(test_id=pk, number=seq_nr).first()
@@ -65,10 +62,9 @@ class TestRunView(View):
 
         current_question = int(self.request.path_info[-1])
         next_question = current_question + 1
-        next_link = self.request.path_info [:-1] + str(next_question)
+        next_link = self.request.path_info[:-1] + str(next_question)
 
         return HttpResponseRedirect(next_link)
-
 
 
 class TestPreView(View):

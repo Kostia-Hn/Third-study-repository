@@ -38,7 +38,5 @@ class TestAdminModel(admin.ModelAdmin):
     form = TestForm
 
 
-
-
 admin.site.register(Test, TestAdminModel)
 admin.site.register(Question, QuestionAdminModel)
