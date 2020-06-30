@@ -9,8 +9,8 @@ class QuestionsInline(admin.TabularInline):
     fields = ('text',)  # 'num_variant_min_limit')
     show_change_link = True
     extra = 1
-#
-#
+
+
 class TestAdminModel(admin.ModelAdmin):
     fields = ('title', 'description', 'level', 'image')
     list_display = ('title', 'description', 'level', 'image')
