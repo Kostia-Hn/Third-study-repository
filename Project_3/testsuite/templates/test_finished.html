@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block content %}
+
+<h3>Congratulations, {{ test.title}} test is finished</h3>
+<table class="table table-hover">
+
+        <tr>
+            <td> Correct answers </td>
+            <td> unknown </td>
+        </tr>
+        <tr>
+            <td> Score</td>
+            <td> unknown </td>
+        </tr>
+
+    </table>
+
+{% endblock %}
