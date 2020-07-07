@@ -1,12 +1,16 @@
 from django.urls import path
-from django.views.generic import TemplateView
-from .views import TestList
+
+from .views import TestList, TestRunView, TestPreView
 
 app_name = 'test'
 
 urlpatterns = [
 
-    path('start/<int:id>', TemplateView.as_view(template_name='Test_start.html'), name='test_start'),
     path('list/', TestList.as_view(template_name='test_list.html'), name='list'),
 
+    path('<int:pk>/question/<int:seq_nr>', TestRunView.as_view(), name='testrun_step'),
+
+    path('<int:id>/', TestPreView.as_view(), name='test preview'),
+
+    # path('<int:pk>/start', StartTestView.as_view(), name='start'),
 ]

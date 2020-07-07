@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block content %}
+
+<p> Question # {{ question.number }}: <b>{{ question.text }}</b> ?<p/>
+
+
+    <form method="post">
+        {% csrf_token %}
+        {% for answer in answers %}
+            <div class="checkbox">
+              <label><input type="checkbox" name="{{forloop.counter}}" value="1">  {{ answer }}</label>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">Submit</button>
+
+    </form>
+{% endblock %}
