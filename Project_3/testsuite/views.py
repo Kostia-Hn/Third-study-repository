@@ -1,11 +1,14 @@
+import datetime
+
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 # Create your views here.
+from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.base import View
 
-from .models import Test, Question
+from .models import Test, Question, TestResult, TestResultDetails
 
 
 class TestList(ListView):
@@ -16,68 +19,80 @@ class TestList(ListView):
 
 
 class TestRunView(View):
+    PREFIX = 'answer_'
     def get(self, request, pk, seq_nr):
-        try:
-            question = Question.objects.filter(test_id=pk, number=seq_nr).first()
-            answers = [
-                answer.text
-                for answer in question.answers.all()
-            ]
-            return render(
-                request=request,
-                template_name='testrun.html',
-                context={'question': question,
-                         'answers': answers}
-            )
-        except:
-            test = Test.objects.get(id=pk)
-            return render(
-                request=request,
-                template_name='test_finished.html',
-                context={'test': test, })
-
-    def post(self, request, pk, seq_nr):
-        data = request.POST
-        text = 'you picked '
-        switch = 1
-
         question = Question.objects.filter(test_id=pk, number=seq_nr).first()
         answers = [
             answer.text
             for answer in question.answers.all()
         ]
-        quantity_of_answers = len(answers)
+        return render(
+            request=request,
+            template_name='test_run.html',
+            context={'question': question,
+                     'answers': answers,
+                     'prefix': self.PREFIX}
+        )
 
-        for i in range(1, quantity_of_answers+1, 1):
+    def post(self, request, pk, seq_nr):
+        test = Test.objects.get(pk=pk)
+        question = Question.objects.filter(test_id=pk, number=seq_nr).first()
+        answers = [answer for answer in question.answers.all()]
 
-            if data.get(str(i)) == '1':
-                text += f'answer {i} '
-                switch = 2
+        choices = {
+            k.replace(self.PREFIX, ''): True
+            for k in request.POST if k.startswith(self.PREFIX)
+        }
 
-        if switch == 2:
-            messages.add_message(self.request, messages.INFO, text)
-        else:
+        if not choices:
             messages.add_message(self.request, messages.WARNING, 'You have to select an answer')
             return HttpResponseRedirect(self.request.path_info)
 
-        current_question = int(self.request.path_info[-1])
-        next_question = current_question + 1
-        next_link = self.request.path_info[:-1] + str(next_question)
+        current_test_result = TestResult.objects.filter(
+            test=test,
+            user=request.user,
+            is_completed=False).last()
 
-        return HttpResponseRedirect(next_link)
+        for idx, answer in enumerate(answers, 1):
+            value = choices.get(str(idx), False)
+            test_result_detail = TestResultDetails.objects.create(
+                test_result=current_test_result,
+                question=question,
+                answer=answer,
+                is_correct=(value == answer.is_correct)
+            )
+
+        messages.add_message(self.request, messages.INFO, choices)
+        if question.number < test.questions.count():
+            return redirect(reverse('test:testrun_step', kwargs={'pk': pk, 'seq_nr': seq_nr + 1}))
+        else:
+            current_test_result.finish()
+
+            current_test_result.save()
+            return render(
+                request=request,
+                template_name='test_finished.html',
+                context={'test_result': current_test_result,
+                         'time_spent': datetime.datetime.utcnow() - current_test_result.datetime_run.replace(tzinfo=None)})
 
 
 class TestPreView(View):
 
     def get(self, request, id):
         test = Test.objects.get(id=id)
-        test_length = len(test.questions.all())
+        test_result = TestResult.objects.create(
+            user=request.user,
+            test=test
+        )
+
+        test_length = test.questions.count()  #len(test.questions.all())
 
         return render(
             request=request,
             template_name='testpreview.html',
             context={'test': test,
-                     'length': test_length}
+                     'length': test_length,
+                     'test_result': test_result}
         )
 
     def post(self, request):
