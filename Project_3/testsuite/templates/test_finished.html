@@ -10,14 +10,16 @@
 <table class="table table-hover">
 
         <tr>
-            <td> Correct answers </td>
-            <td> unknown </td>
+            <td> Score</td>
+            <td> {{test_result.avg_score}} </td>
         </tr>
         <tr>
-            <td> Score</td>
-            <td> unknown </td>
+            <td> Time spent</td>
+            <td> {{time_spent}} </td>
         </tr>
 
     </table>
-
+        <div class="d-flex justify-content-center mt-5 mb-5">
+            <a href="{% url 'test:list' %}" type="button" class="btn-lg btn-success">START ANOTHER TEST</a>
+        </div>
 {% endblock %}
