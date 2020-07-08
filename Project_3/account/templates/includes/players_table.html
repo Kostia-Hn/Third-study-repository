@@ -1,32 +1,30 @@
 
-{% if players_list %}
-
-    {% include 'pagination.html' %}
+{% if list %}
 
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
               <th>Avatar</th>
-              <th>Rank</th>
               <th>User</th>
-              <th>Score</th>
-              <th>Points</th>
+              <th>Total number of runs</th>
+              <th>Last run</th>
+              <th>Total score</th>
             </tr>
         </thead>
 
-            {% for User in players_list %}
+            {% for User in list %}
                 <tr>
                   <td>
                   <div class="media">
                         <div class="img-circle.vert">
-                            <img class="rounded-circle p-1 m-1" width="80" height="80" src="{{ User.image.url }}">
+                            <img class="rounded-circle p-1 m-1" width="80" height="80" src="{{ User.pic }}">
                         </div>
                     </div>
                   </td>
-                  <td> {{ User.rank }}</td>
-                  <td> {{ User.first_name }} {{ User.last_name }}</td>
-                  <td> {{ User.avr_score }}</td>
-                  <td> {{ User.points }}</td>
+                  <td> {{ User.name }}</td>
+                  <td> {{ User.total_number_of_runs }}</td>
+                  <td> {{ User.last_run }}</td>
+                  <td> {{ User.total_score }}</td>
 
                 </tr>
         {% endfor %}

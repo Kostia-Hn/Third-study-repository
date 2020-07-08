@@ -86,6 +86,10 @@ class TestResult(models.Model):
     datetime_run = models.DateTimeField(auto_now_add=True)
     is_completed = models.BooleanField(default=False)
 
+
+    current_progress = models.PositiveSmallIntegerField(default=1)
+    number_of_completed_runs = models.PositiveSmallIntegerField(default=0)
+
     avg_score = models.DecimalField(default=0.0,
                                     validators=[MinValueValidator(0),
                                                 MaxValueValidator(100)],
@@ -102,12 +106,14 @@ class TestResult(models.Model):
             for entry in qs
         )
 
+
     def finish(self):
         self.update_score()
         self.is_completed = True
+        self.number_of_completed_runs += 1
 
-    def __str__(self):
-        return f'{self.test.title}, {self.user.full_name()}, {self.datetime_run}'
+    # def __str__(self):
+    #     return f'{self.test.title}, {self.user.full_name()}, {self.datetime_run}'
 
 
 class TestResultDetails(models.Model):
@@ -119,3 +125,9 @@ class TestResultDetails(models.Model):
     def __str__(self):
         return f'Test run: {self.test_result.id}, Question: {self.question.text}, Success: {self.is_correct}'
 
+
+# class BestResults(models.Model):
+#     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='best_results', on_delete=models.CASCADE)
+#     test = models.ForeignKey(to=Test, related_name='best_results', on_delete=models.CASCADE, null=True)
+#
+#     best_result = models.DecimalField(default=0.0, decimal_places=2, max_digits=6)

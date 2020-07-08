@@ -35,6 +35,7 @@ class TestRunView(View):
         )
 
     def post(self, request, pk, seq_nr):
+
         test = Test.objects.get(pk=pk)
         question = Question.objects.filter(test_id=pk, number=seq_nr).first()
         answers = [answer for answer in question.answers.all()]
@@ -53,6 +54,14 @@ class TestRunView(View):
             user=request.user,
             is_completed=False).last()
 
+        if not current_test_result:
+            current_test_result = TestResult.objects.create(
+                    user=request.user,
+                    test=test
+                )
+
+        current_test_result.current_progress = seq_nr+1
+
         for idx, answer in enumerate(answers, 1):
             value = choices.get(str(idx), False)
             test_result_detail = TestResultDetails.objects.create(
@@ -62,38 +71,47 @@ class TestRunView(View):
                 is_correct=(value == answer.is_correct)
             )
 
-        messages.add_message(self.request, messages.INFO, choices)
+        messages.add_message(self.request, messages.INFO, current_test_result.current_progress)
         if question.number < test.questions.count():
+            current_test_result.save()
             return redirect(reverse('test:testrun_step', kwargs={'pk': pk, 'seq_nr': seq_nr + 1}))
         else:
             current_test_result.finish()
-
             current_test_result.save()
+            num_of_runs = request.user.number_of_runs(test)
+            best_result = request.user.best_result(test)
             return render(
                 request=request,
                 template_name='test_finished.html',
                 context={'test_result': current_test_result,
-                         'time_spent': datetime.datetime.utcnow() - current_test_result.datetime_run.replace(tzinfo=None)})
+                         'time_spent': datetime.datetime.utcnow() - current_test_result.datetime_run.replace(tzinfo=None),
+                         'num_of_runs': num_of_runs,
+                         'best_result': best_result})
 
 
 class TestPreView(View):
 
     def get(self, request, id):
         test = Test.objects.get(id=id)
-        test_result = TestResult.objects.create(
-            user=request.user,
-            test=test
-        )
 
-        test_length = test.questions.count()  #len(test.questions.all())
+        a = request.user.determine_unfinished_tests(test)
+        test_length = test.questions.count()
+        if a:
+            message = a[0]
+            current_run = a[1].last().current_progress
 
-        return render(
-            request=request,
-            template_name='testpreview.html',
-            context={'test': test,
-                     'length': test_length,
-                     'test_result': test_result}
-        )
-
-    def post(self, request):
-        pass
+            return render(
+                request=request,
+                template_name='testpreview.html',
+                context={'test': test,
+                         'length': test_length,
+                         'message': message,
+                         'current_run': current_run}
+            )
+        else:
+            return render(
+                request=request,
+                template_name='testpreview.html',
+                context={'test': test,
+                         'length': test_length}
+            )

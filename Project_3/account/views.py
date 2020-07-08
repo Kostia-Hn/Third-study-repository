@@ -4,6 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic.base import View
 
 from .forms import UserAccountRegistrationForms, UserAccountProfileForm
 from .models import ProUser
@@ -54,8 +55,28 @@ class UserAccountUpdateView(UpdateView):
         return reverse('success')
 
 
-class LeaderBoard(ListView):
-    model = ProUser
-    template_name = 'leaderboard.html'
-    context_object_name = 'players_list'
-    paginate_by = 20
+# class LeaderBoard(ListView):
+#     model = ProUser
+#     template_name = 'leaderboard.html'
+#     context_object_name = 'players_list'
+#     paginate_by = 20
+
+class LeaderBoard(View):
+    def get(self, request):
+        qs = ProUser.objects.all()
+        list = []
+        for i in qs:
+            d_list = {
+                'name': i.first_name + i.last_name,
+                'pic': i.image.url,
+                'total_number_of_runs': i.total_number_of_runs(),
+                'last_run': i.last_run(),
+                'total_score': i.total_score()
+            }
+            list.append(d_list)
+
+        return render(
+            request= request,
+            template_name='leaderboard.html',
+            context={'list': list})
+

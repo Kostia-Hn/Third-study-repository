@@ -24,7 +24,7 @@
             <td> num of runs</td>
         </tr>
         <tr>
-            <td> Best result</td>
+            <td> Best result </td>
             <td> {{ length }}</td>
         </tr>
         <tr>
@@ -35,11 +35,32 @@
             <td> Current open run </td>
             <td> {{ test_result.datetime_run }}</td>
         </tr>
+        <tr>
+            <td> User </td>
+            <td> {{ test_result }}</td>
+        </tr>
+        {% if message %}
+        <tr>
+            <td> Message </td>
+            <td> {{ message }}</td>
+        </tr>
+        <tr>
+            <td> current_run </td>
+            <td> {{ current_run }}</td>
+        </tr>
+        {% endif %}
     </table>
+    {% if message %}
+    <div class="img-circle.vert">
+        <img class="rounded-circle p-1 m-1" width="300" height="300" src="{{ test.image.url }}">
+        <a href="question/{{ current_run }}" class="btn btn-primary">Continue test</a>
+    </div>
+    {% else %}
     <div class="img-circle.vert">
         <img class="rounded-circle p-1 m-1" width="300" height="300" src="{{ test.image.url }}">
         <a href="question/1" class="btn btn-primary">Begin test</a>
     </div>
+    {% endif %}
 </div>
 
 
